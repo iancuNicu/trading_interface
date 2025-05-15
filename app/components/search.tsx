@@ -1,24 +1,38 @@
 import { Button, Input, XStack } from "tamagui";
 import {NativeSyntheticEvent, StyleSheet, TextInputChangeEventData} from 'react-native';
 import { Search as SearchIcon } from '@tamagui/lucide-icons'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLazyGetStocksQuery } from "@/store/stocks/stocks.api";
+import { ToastViewport, useToastController } from "@tamagui/toast";
+import ErrorToast from "./error-toast";
 
 export default function Search() {
     const [ticker, setTicker] = useState('')
-    const [getStocksTrigger, {data: items,
+    const [getStocksTrigger, {
+        data: items,
         isLoading,
         isFetching, // Useful to know if a refetch is happening while data is displayed
         isError,
         error,
         isSuccess}] = useLazyGetStocksQuery();
+    const toast = useToastController();
+
+    useEffect(() => {
+        if(isSuccess){
+            //TODO: go to stock view page
+        }
+        else if(isError){
+            toast.show('Error',{
+                message: `Could not load resource \n ${error}`
+            })
+        }
+    }, [items, isSuccess, isError])
 
     const onChange = (value: NativeSyntheticEvent<TextInputChangeEventData>) => {
         setTicker(value.nativeEvent.text)
     }
 
     const onBtnPress = () => {
-        console.log('BTN press');
         getStocksTrigger({
             tickers: tickerToList(),
             attributes: undefined,
@@ -40,6 +54,7 @@ export default function Search() {
                    autoCapitalize='none' width="100%"/>
             <Button onPress={() => onBtnPress()} 
                     alignSelf="center" icon={SearchIcon} size="$3" style={styles.search_button} />
+            <ErrorToast />
         </XStack>
     )
 }

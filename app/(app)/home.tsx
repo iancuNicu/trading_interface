@@ -4,6 +4,7 @@ import { View, Text } from 'react-native';
 import { useSelector } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Search from '../components/search';
+import { ToastProvider } from '@tamagui/toast';
 
 
 export default function IndexScreen() {
@@ -14,14 +15,16 @@ export default function IndexScreen() {
   }
   
   return (
-    <SafeAreaView>
-      <View
-        style={{
-          alignItems: "center",
-        }}
-      >
-       <Search />
-      </View>
-    </SafeAreaView>
+    <ToastProvider>
+        <SafeAreaView>
+          <View
+            style={{
+              alignItems: "center",
+            }}
+          >
+            <Search />
+          </View>
+      </SafeAreaView>
+    </ToastProvider>
   );
 }

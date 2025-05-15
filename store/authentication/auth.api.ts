@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { AuthReq, AuthResponse } from '../models/auth.models';
+import { AuthReq, AuthResponse, RefreshResponse } from '../models/auth.models';
 
 const tags: any = ['Auth'];
 
@@ -31,8 +31,19 @@ export const authApi = createApi({
                 body: {user:{email, password}},
               }),
               invalidatesTags: tags
+        }),
+        refresh: builder.mutation<RefreshResponse, {access_token: string}>({
+          query: ({access_token}) => ({
+             url: 'refresh-token', 
+             method: 'POST',
+             headers: {
+              "Authorization": `Bearer ${access_token}`
+             }
+          })
         })
       })
 })
 
-export const { useLoginMutation, useSignupMutation } = authApi;
+export const { useLoginMutation, useSignupMutation, useRefreshMutation } = authApi;
+
+export const {endpoints, util} = authApi;

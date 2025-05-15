@@ -15,3 +15,7 @@ export interface AuthResponse {
 export interface UserModel {
     email: string
 }
+
+export interface RefreshResponse {
+    access_token: string
+}

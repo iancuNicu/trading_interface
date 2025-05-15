@@ -23,6 +23,9 @@ export const authSlice = createSlice({
             state.access_token = null;
             state.refresh_token = null;
         },
+        setToken: (state, action) => {
+            state.access_token = action.payload;
+        },
         setError: (state, action) => {
             state.user = null;
             state.access_token = null;
@@ -58,7 +61,7 @@ export const authSlice = createSlice({
     }
 })
 
-export const { setError } = authSlice.actions;
+export const { setError, logout, setToken } = authSlice.actions;
 
 export const selectUser = (state: any) => state.auth.user;
 
